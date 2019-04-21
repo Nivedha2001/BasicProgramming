@@ -1,0 +1,35 @@
+#include<iostream.h>
+#include<conio.h>
+#include<stdlib.h>
+#include<string.h>
+#define size 5
+void main()
+{
+ clrscr();
+ char code[size],ch,otp[size];
+ int n=0;
+ randomize();
+
+  while(n<size)
+ {
+  ch=(char)random(127);
+  if(ch>='a'&&ch<='z' || ch>='0'&&ch<='9' || ch>='A'&&ch<='Z')
+  {
+   code[n++]=ch;
+  }
+ }
+ code[n]='\0';
+ cout<<"\n CODE GENERATED"<<endl;
+
+  textcolor(11);
+  cprintf(code);
+ cout<<endl;
+ cout<<"Enter the OTP to verify: ";
+ cin>>otp;
+
+  if(strcmp(code,otp)==0)
+  cout<<"\nOTP Verified....";
+ else
+  cout<<"\nOTP wrong....";
+ getch();
+}
