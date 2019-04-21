@@ -1,0 +1,415 @@
+#include<iostream.h>
+#include<  conio  .h>
+#include<  fstream  .h>
+#include<stdio.h>
+#include<iomanip.h>
+#include<process.h>
+#include<string.h>
+#include<time.h>
+//*********************************************************************
+//
+//      CLASSES     ,     OBJECTS     AND     MEMBER     FUNCTIONS
+//
+//*********************************************************************
+class     book
+{     int     bno;
+     int     bcnt;
+     char     bnm[30];
+     char     anm  [30];
+     public:
+      book(){bcnt=0;bno=0;strcpy(bnm,"null");strcpy(  anm  ,"null");}
+     void     bent();
+     void     bout();
+     void     bcnt1(int     a){if(a  ==  1)bcnt--;     if(a  ==  0)bcnt  ++  ;          }
+     int     retbno  ()     {        return     bno;     }
+    int     retbcnt  (){     return     bcnt;     }
+}b;
+
+class     date
+{      public:
+        int     dd,mm,  yy  ;
+        date(){dd=0;mm=0;  yy  =0;}
+        void     dshow();
+        unsigned     long     int     dcomp(date,date);
+}d;
+class     member:private     book,public     date
+{     int     mno;
+     char     mnm[30];
+     date     issuedate;     int     token;int     regno  ;date     returndate  ;
+      public:
+       member(){mno=token=  regno  =0;strcpy(mnm,"null");token=0;}
+       void     ment();
+       void     mout();
+       int     rettoken  ();
+       void     settoken(int     ch  );
+       int     mregno();
+       int     retmno  (){  return     mno;}
+       void     setissuedate();
+       date     retdate  (){     return     issuedate;}
+       void     setregno(int     a);
+       void     setreturndate();
+       void     fine  (date);
+}m;
+
+//*********************************************************************
+//
+//                       Member     Function     Definition
+//
+//*********************************************************************
+void     book::bent()
+    {       cout  <<  "\n     Enter     Book     number:";  cin  >>bno;
+         cout  <<  "\n     Enter     Book     name:";  gets  (bnm);
+         cout  <<  "\n     Enter     Author     name:";  gets  (  anm  );
+         cout  <<  "\n     Enter     the     number     of     copies     available  :";  cin  >>bcnt;
+         cout  <<  "\n     BOOK     ADDED  !!!!";
+    }
+void     book::bout()
+    {      cout  <<  "\n     Book     number:";  cout  <<  bno;
+        cout  <<  "\n     Book     Name  :";  cout  <<  bnm;
+        cout  <<  "\n     Author     Name  :";  cout  <<  anm  ;
+        cout  <<  "\n     Number     of     copies     available  :";  cout  <<  bcnt;
+    }
+void     date::dshow()     {     cout  <<  dd  <<  "."  <<  mm  <<  "."  <<  yy  ;     }
+    unsigned     long     int     date::dcomp(date     a,date     b)
+    {      unsigned     long     int     s1,s2;s1=a.dd+(a.mm*30)+(a.  yy  *365);
+         s2=b.dd+(b.mm*30)+(b.  yy  *365);
+         if(a.dd>b.dd  &&  a.mm  ==  b.mm  &&  a.  yy  ==  b.  yy  )     return     s2-s1;
+         else     if(a.mm>b.mm  &&  a.  yy  ==  b.  yy  )     return     s2-s1;
+         else     if(a.  yy  >b.  yy  )     return     s2-s1;
+         else     return     0;
+    }
+
+void     member::ment()
+    {      regno  =0;
+        cout  <<  "\n     Enter     member     name:";  gets  (mnm);
+        cout  <<  "\n     Enter     registration     number     of     the     member:";  cin  >>mno;
+    }
+void     member::mout()
+    {      cout  <<  "\n     Member     name:"  <<  mnm;
+        cout  <<  "\n     Registration     number:"  <<  mno;
+        if     (token  ==  1)      cout  <<  "\n     Member's     Borrowed     book     number:"  <<  regno  ;
+    }
+int     member::  rettoken  (){     return     token;     }
+void     member::settoken(int     ch  )
+    {      if(  ch  ==  1)     token=1;
+        else     token=0;
+    }
+int     member::mregno(){     return     regno  ;     }
+void     member::setissuedate()
+{      time_t     t=time(0);
+      struct     tm     *now=localtime(&t);
+      issuedate.  yy  =now->tm_  year  +1900;
+      issuedate.mm=now->tm_mon+1;
+      issuedate.dd=now->tm_mday;
+      cout  <<  "\nIssueDate:";issuedate.dshow();
+}
+void     member::setreturndate()
+{      returndate  .dd=issuedate.dd+7;  returndate  .mm=issuedate.mm;
+      r  eturndate  .  yy  =issuedate.  yy  ;
+       if(issuedate.mm  ==  1  ||  issuedate.mm  ==  3  ||  issuedate.mm  ==  5  ||  issuedate.mm  ==  7  ||
+
+       issuedate.mm  ==  8  ||  issuedate.mm  ==  10  ||  issuedate.mm  ==  12)
+       {      if(  returndate  .dd>31)
+          {       returndate  .dd-=31;
+               returndate  .mm  ++  ;
+               if(  returndate  .mm>12)
+               {      returndate  .mm-=12;
+      returndate  .  yy  ++  ;
+               }
+          }
+       }
+             else     if(issuedate.mm!=2)
+               {      if(  returndate  .dd>30)
+           {      returndate  .  dd  -=30;
+                returndate  .mm  ++  ;
+           }
+                }
+             else
+              {      if(  returndate  .  yy  %400  ==  0  &&  returndate  .  yy  %100  ==  0)
+         {      if(  returndate  .dd>29)
+              {     returndate  .dd-=29;  returndate  .mm  ++  ;     }
+          }
+                  else
+          {      if(  returndate  .dd>28)
+               {      returndate  .dd-=28;  returndate  .mm  ++  ;      }
+          }
+                  }  cout  <<  "\n     Returndate:";
+                    returndate  .dshow();
+        }
+
+void     member::  fine  (date     a)
+{       unsigned     long     int     d;
+        d=m.dcomp(a,  returndate  );
+       if(d  ==  0)
+        {      cout  <<  "\n      You     have     returned     within     time     limit!";
+            cout  <<  "\n     No     fine  !";
+            settoken(0);
+         }
+       else
+         {      cout  <<  "\n     You     have     timed     out!  Fine     is     Rs5     per     day     late!";
+             cout  <<  "\n     Your     fine     is     Rs."  <<  d*5;
+             settoken(0);
+          }
+      }
+void     member::setregno(int     a){     regno  =a;}
+//*********************************************************************
+//
+//                     Function     for     library     administration
+//
+//*********************************************************************
+//  function     to     enter     new     book
+void     bookentry()
+{      ofstream     f("book.dat",ios::  ate  |ios::binary);
+      char     ch  1;
+      do{      cout  <<  "\n     Book     Entry  :";     b.bent();
+              f.  write  ((  char  *)&b,sizeof(b));
+               cout  <<  "\n     Do     you     want     to     continue  ?<y/n>";  cin  >>  ch  1;
+             }  while  (  ch  1  =='  y  '||  ch  1  =='  Y');     f.  close  ();
+
+    }
+//  function     to     delete     existing     book
+void     bookdelete()
+    {      int     b_no;
+        ifstream     f1("book.dat",ios::in|ios::binary);
+        ofstream     f2("temp.dat",ios::out|ios::binary);
+        cout  <<  "\n     Enter     the     book     number     of     the     book     to     be     deleted:";  cin  >>b_no;
+        while  (f1.  read  ((  char  *)&b,sizeof(b)))
+           {      if(b.  retbno  ()!=b_no)
+               f2.  write  ((  char  *)&b,sizeof(b));
+           }f1.  close  ();     f2.  close  ();
+         remove  ("book.dat");     rename  ("temp.dat","book.dat");    
+      }
+//  function     to     modify     a     book
+void     bookmodify()
+{      int     pos,b_no;
+      fstream     f("book.dat",ios::in|ios::out|ios::binary);
+      cout  <<  "\n     Enter     the     book     number     of     the     book     to     be     modified:";
+      cin  >>b_no;     f.seekg(0);
+       while  (f.  read  ((  char  *)&b,sizeof(b)))
+          {      pos=f.tellg();
+              if(b.  retbno  ()  ==  b_no)
+               {      f.seekg(pos-sizeof(b),ios::beg);
+      cout  <<  "\n     Enter     modified     details:";b.bent();
+      f.  write  ((  char  *)&b,sizeof(b));
+                }
+            }f.  close  ();
+       }
+
+//  function     to     display     a     book
+void     bookdisplay()
+{      int     i=0;
+      ifstream     f("book.dat",ios::in|ios::binary);
+      while  (f.  read  ((  char  *)&b,sizeof(b)))
+       {      i  ++  ;
+           cout  <<  "\n     Book     "  <<  i  <<  ":";      b.bout();
+       }f.  close  ();
+    }
+//  function     to     enter     a     new     member
+void     memberentry()
+{      ofstream     f("member.dat",ios::  ate  |ios::binary);
+      char     ch  1;
+      do{      cout  <<  "\n     Member     Entry  :";
+              m.ment();
+              f.  write  ((  char  *)&m,sizeof(m));
+              cout  <<  "\n     DO     you     want     to     coninue  ?<y/n>";
+              cin  >>  ch  1;
+           }  while  (  ch  1  =='  y  '||  ch  1  =='  Y');     f.  close  ();
+     }
+//  function     to     delete     an     existing     member
+void     memberdelete()
+     {      ifstream     f1("member.dat",ios::in|ios::binary);
+         ofstream     f2("temp.dat",ios::out|ios::binary);
+         int     m_no;
+         cout  <<  "\n     Enter     the     member     number     of     the     member     to     be     deleted:";  cin  >>m_no;
+         while  (f1.  read  ((  char  *)&m,sizeof(m)))
+             {      if(m.  retmno  ()!=m_no){     f2.  write  ((  char  *)&m,sizeof(m));}
+
+              }
+              f1.  close  ();
+              f2.  close  ();
+              remove  ("member.dat");
+              rename  ("temp.dat","member.dat");
+          }
+//  function     to     modify     a     member
+voidmembermodify()
+{      int     pos,m_no;
+      fstream     f("member.dat",ios::in|ios::out|ios::binary);
+      cout  <<  "\n     Enter     the     member     number     of     the     member     details     to     be     modified:";  cin  >>m_no;
+     while  (f.  read  ((  char  *)&m,sizeof(m)))
+      {      pos=f.tellg();
+          if(m.  retmno  ()  ==  m_no)
+            {      f.seekg(pos-sizeof(m),ios::beg);
+                cout  <<  "\n     Enter     the     new     member     details:";m.ment();   
+                f.  write  ((  char  *)&m,sizeof(m));
+            }
+         }f.  close  ();
+       }
+//  function     to     display     a     member
+void     memberdisplay()
+{      ifstream     f("member.dat",ios::in|ios::binary);
+      while  (f.  read  ((  char  *)&m,sizeof(m)))
+        {     m.mout();     }
+      f.  close  ();
+}
+
+//  function     to     issue     a     book
+void     issuebook()
+{        fstream     f1,f2;
+        f1.open("member.dat",ios::in|ios::out|ios::binary);
+        f2.open("book.dat",ios::in|ios::binary);
+        int     r_no,b_no;
+       cout  <<  "\n     Enter     your     regno     no:";  cin  >>r_no;
+       while  (f1.  read  ((  char  *)&m,sizeof(m)))
+         {      if(m.  retmno  ()  ==  r_no)
+              {      cout  <<  "\n     Valid     Member!!";
+                  cout  <<  "\n     Enter     the     book     number     of     the     book     to     be     issued";
+                  cin  >>b_no;
+                  while  (f2.  read  ((  char  *)&b,sizeof(b)))
+          {      if(b.  retbno  ()  ==  b_no  &&  b.  retbcnt  ()>0)
+          {      cout  <<  "\n     Book     Available     for     lending";
+              cout  <<  "\n     Customer     can     now     take     the     book.";
+              cout  <<  "\n     Book     must     be     returned     in     7     days.";
+              b.bcnt1(1);     m.settoken(1);     m.setissuedate();
+              m.setreturndate();     m.setregno(b_no);
+              int     pos     =     -1     *     sizeof(m);
+             f1.seekg(pos,     ios::  cur  );
+             f1.  write  ((  char  *)&m,     sizeof(m));
+            cout  <<  "\n\n\t     Book     issued     successfully";
+          }
+          }
+                }
+      }f1.  close  ();      f2.  close  ();
+    }
+
+//  function     to     return     a     book
+void     returnbook  ()
+{      int     r_no,bno;
+      fstream     f1("member.dat",ios::in|ios::out|ios::binary);
+      ifstream     f2("book.dat",ios::in|ios::binary);
+      cout  <<  "\n     Enter     the     member's     registration     number:";  cin  >>r_no;
+      date     a;     time_t     t=time(0);     struct     tm     *now=localtime(&t);
+      a.  yy  =now->tm_  year  +1900;     a.mm=now->tm_mon+1;
+      a.dd=now->tm_mday;     int     h;     f1.seekg(0);     f2.seekg(0);
+     while  (f1.  read  ((  char  *)&m,sizeof(m)))
+       {      h=m.  rettoken  ();
+           if(m.mregno()  ==  r_no  &&  h  ==  1)
+            {      cout  <<  "\n     Enter     the     book     number     of     the     book     you     borrowed";
+                cin  >>bno;
+               while  (f2.  read  ((  char  *)&b,sizeof(b)))
+                {      if(b.  retbno  ()  ==  bno)
+           {       b.bcnt1(0);      m.settoken(0);     m.  fine  (a);     m.setregno(0);
+                int     pos     =     -1     *     sizeof(m);     f1.seekg(pos,     ios::  cur  );
+                             f1.  write  ((  char  *)&m,     sizeof(m));
+                 cout  <<  "\n     Thank     you     for     returning     the     book!";
+                       }
+                   }
+              }
+          }f1.  close  ();     f2.  close  ();
+       }
+ 
+
+//  function     to     give     password
+void     givepassword  ()
+{       clrscr  ();     char     c1[10];     strcpy(c1,"nivar123");     char     n[10],c;      int     i=0;
+       a:     cout  <<  "\n     Enter     your     passWord:";
+           for  (int     j=0;j<8;j  ++  )
+            {     c=     getch  ();     n[j]=c;     cout  <<  "*";     }     n[j]  ='\  0';
+          if(strcmp(n,c1)  ==  0)     cout  <<  "\n     You     entered     the     right     password!";
+         else  {     cout  <<  "\n     the     psw     you     entered     is     wrong  ";i  ++  ;
+            if(i>2)     exit  (0);
+            else     {     cout  <<  "RETRY!";     clrscr  ();     goto     a;     }
+                }
+     }
+//*********************************************************************
+//
+//                     Introductory     page     and     login
+//
+//*********************************************************************
+void     intro()
+{      cout  <<  "                !               !     !!!!!     !         !!!!!     !!!!!!         !       !         !!!!!";
+      cout  <<  "\n            !             !      !         !         !         !        !        !     !     !     !        !        ";
+      cout  <<  "\n             !       !       !       !!!!!     !         !         !        !       !       !       !       !!!!!";
+      cout  <<  "\n              !     !     !     !        !         !         !         !        !      !             !      !        ";
+      cout  <<  "\n               !       !         !!!!!     !!!!!     !!!!!     !!!!!!     !               !     !!!!!\n\n\n\n";
+      cout  <<  "\n                 !!!!!     !!!!!!                !         !     !     !           !      !         !!!!!       ";
+      cout  <<  "\n              !       !        !                !     !       !     !      !         !      !     !        !        !      ";
+      cout  <<  "\n              !       !        !                !      !      !     !       !       !      !!!!!       !!!!!       ";
+      cout  <<  "\n              !       !        !                !       !     !     !        !     !      !         !      !       !       ";
+     cout  <<  "\n              !       !!!!!!                !         !     !         !      !           !     !        !     \n\n\n\n     ";
+
+     cout  <<  "\n                  !          !     !!!!!      !!!!!          !         !!!!!      !         !        ";
+     cout  <<  "\n                  !          !     !        !     !        !        !     !        !        !      !       !         ";
+     cout  <<  "\n                  !          !     !!!!!      !!!!!        !!!!!       !!!!!        !     !          ";
+     cout  <<  "\n                  !          !     !        !     !       !       !         !      !       !         !           ";
+     cout  <<  "\n                  !!!!!!     !     !!!!!      !        !     !           !     !        !        !           \n";
+     cout  <<  "     PRESS     any     key     to     continue  !!!!";     getch  ();     clrscr  ();     givepassword  ();  getch  ();
+     clrscr  ();     cout  <<  "\n\n\t\t\t           NIVAR     LIBRARY  ";     cout  <<  "\n\t\t\t           -----     -------";
+     cout  <<  "\n\n\t\t     This      application      is      for      librarian      use      only.";
+     cout  <<  "\n\n\n\t\tOur      Library       gives      the      user      the      facility      of";
+     cout  <<  "\n\n\n\t\tborrowing      book      from      the      library.     But      the      book";
+     cout  <<  "\n\n\n\t\tmust      be      mediated      by      the      librarian      only      and      ";
+     cout  <<  "\n\n\n\t\tmust      be      returned      before      1      week      else      fine      must";
+     cout  <<  "\n\n\n\t\tbe      collected      from      them.     For      each      day's      delay";
+     cout  <<  "\n\n\n\t\tRs.5      must      be      collected      as      fine  .";  getch  ();
+}
+//*********************************************************************
+//
+//                            Main     program
+//
+//************************************************************
+   void     main()
+    {      clrscr  ();     int     ch  1,  ch  2,  ch  3,  ch  4;  char     ch  5,  ch  6;     intro();
+         do
+           {      clrscr  ();     cout  <<  "\n\t\t\t         LIBRARIAN     DATABASE  ";
+               cout  <<  "\n\t\t\t     Enter     your     choice  :";     cout  <<  "\n\t\t\t      1.  Book     Details  ";
+               cout  <<  "\n\t\t\t      2.Member     Details  ";     cout  <<  "\n\t\t\t      3.  Library     book     transactions";
+               cout  <<  "\n\t\t\t      4.  exit  ";     cin  >>  ch  1;
+             
+
+              switch(  ch  1)
+                 {      case     1:     clrscr  ();     cout  <<  "\n\t\t\t     Book     Database  ";
+                      cout  <<  "\n\t\t\t      1.     Book     Entry  ";     cout  <<  "\n\t\t\t      2.     Book     Display  ";
+                      cout  <<  "\n\t\t\t      3.     Book     Modify";     cout  <<  "\n\t\t\t      4.     Book     Delete  ";
+                      cin  >>  ch  2;     clrscr  ();
+                     switch(  ch  2)
+                         {      case     1:     bookentry();     break;
+                         case     2:     cout  <<  "\n\t\t\t     Book     Display  :";
+                               bookdisplay();break;
+                         case     3:     cout  <<  "\n\t\t\t     Book     Modify:";
+                           bookmodify();     break;
+                         case     4:     cout  <<  "\n\t\t\t     Book     Delete  :";
+                               bookdelete();     break;
+                           }     break;
+           case     2:     clrscr  ();     cout  <<  "\n\t\t\t     Member     Database  ";     cout  <<  "\n\t\t\t      1.     Member     Entry  ";
+            cout  <<  "\n\t\t\t      2.     Member     Display  ";     cout  <<  "\n\t\t\t      3.     Member     Modify";
+            cout  <<  "\n\t\t\t      4.     Member     Delete  ";     cin  >>  ch  3;     clrscr  ();
+         switch(  ch  3)
+          {      case     1:     memberentry();     break;
+              case     2:     cout  <<  "\n\t\t\t     Member     Display  :";
+                     memberdisplay();     break;
+              case     3:     cout  <<  "\n\t\t\t     Member     Modify:";
+                    membermodify();     break;
+              case     4:     cout  <<  "\n\t\t\t     Member     Delete  :";
+                                     memberdelete();     break;
+          }
+             break;
+         
+
+             case     3:      clrscr  ();     cout  <<  "\n\t\t\t     Book     Transaction     Database  ";
+               cout  <<  "\n\t\t\t     1.     Book     issue";     cout  <<  "\n\t\t\t     2.     Book     Return";
+               cin  >>  ch  4;     clrscr  ();
+               switch(  ch  4)
+                  {      case     1:     cout  <<  "\n\t\t\t     Book     Issue  :";     issuebook();     break;
+                      case     2:     cout  <<  "\n\t\t\t     Book     Return:";     returnbook  ();     break;
+                  }
+                 break;
+             case     4:      clrscr  ();     cout  <<  "\n\t\t     Thank     you  ,     Visit     again  !!!";     exit  (0);
+             default:      cout  <<  "\n     Enter     a     valid     option!!!";
+        }     cout  <<  "\n     Do     you     want     to     continue  ?<y/n>";  cin  >>  ch  5;
+      }  while  (  ch  5  =='  y  '||  ch  5  =='  Y');     clrscr  ();     getch  ();
+    }
+//*********************************************************************
+//
+//     END                      OF                        PROJECT
+//
+//*********************************************************************     
