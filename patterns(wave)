@@ -1,0 +1,75 @@
+#include <iostream> 
+using namespace std;     //used to invoke all std   functions and to allow the use of flexible prefixes(dont have to type std::prefixes)                                              
+
+void wave(int WH, int WL)                                          //function definition
+{ 
+    int i, j, k, e, n, count, x; 
+    e = 2; 
+    x = 1; 
+  
+    int char1 = 'A' + WH - 1; 
+    int char2 = 'A' + WH; 
+  
+                                                                
+                                                                
+                                                             
+                                                                    // for loop for height of wave
+    for (i = 1; i <= WH; i++) 
+    { 
+        for (j = WH; j <= WH + i; j++) 
+        { 
+            cout << " "; 
+        } 
+  
+                                                                    
+                                                                    // for loop for wave length 
+        for (count = 1; count <= WL; count++) 
+        { 
+  
+                                                                     // checking for intermediate spaces 
+            for (n = (WH + WH - 2); n >= x; n--) 
+                cout << " "; 
+            for (k = 1; k <= e; k++) 
+            { 
+                if (k == 1) 
+                    cout << char1 << " "; 
+                else if (k == e) 
+                    cout << char2 << " "; 
+                else
+                    cout << " "; 
+            } 
+            char1 = char1 + WH * 2; 
+            char2 = char2+ WH * 2; 
+  
+                                                                      // checking the limit 
+            if (char1 > 'Z') 
+                char1 = char1 - 26; 
+            if (char2 > 'Z') 
+                char2 = char2 - 26; 
+        } 
+  
+                                                                      // incrementing counters value by two 
+        x = x + 2; 
+        e = e + 2; 
+        char1 = 'A' + WH - i - 1; 
+        char2 = 'A' + WH + i; 
+        cout << endl; 
+    } 
+} 
+  
+                                                                      // main function 
+int main() 
+{ 
+                                                                      /* change value to decrease or increase 
+                                                                      the height of wave */
+    int WH = 4; 
+  
+                                                                     /* change value to decrease or increase  
+                                                                     the length of wave */
+    int WL = 4; 
+  
+    wave(WH, WL); 
+  
+    return 0; 
+} 
+
